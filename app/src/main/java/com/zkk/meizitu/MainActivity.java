@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("zkk---","--");
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.navigation_bar_layout);
     }
 }
+
