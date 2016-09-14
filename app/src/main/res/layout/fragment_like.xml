@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:card="http://schemas.android.com/apk/res-auto"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:fitsSystemWindows="true">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true">
 
     <com.huxq17.swipecardsview.SwipeCardsView
         android:id="@+id/swipCardsView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="400dip"
         android:background="#f3f3f3"
-        card:alphaOffsetStep="40"
-        card:scaleOffsetStep="0.08"
-        card:yOffsetStep="20dp" />
+        card:alphaOffsetStep="60"
+        card:scaleOffsetStep="0.6"
+        card:yOffsetStep="30dp" />
+
+        <LinearLayout
+            android:layout_below="@+id/swipCardsView"
+            android:id="@+id/card_bottom_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="40dip"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/card_left_btn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/ignore_button" />
 
 
+            <Button
+                android:id="@+id/card_right_btn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/like_button" />
+        </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

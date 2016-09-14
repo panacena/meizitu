@@ -1,7 +1,6 @@
 package com.zkk.meizitu.ui.like.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -35,7 +34,7 @@ public class MeiziAdapter extends BaseCardAdapter {
 
     @Override
     public int getCardLayoutId() {
-        return R.layout.card_item;
+        return R.layout.card_item2;
     }
 
     @Override

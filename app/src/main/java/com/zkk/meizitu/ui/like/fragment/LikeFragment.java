@@ -1,7 +1,6 @@
 package com.zkk.meizitu.ui.like.fragment;
 
 import android.view.View;
-import android.widget.Button;
 
 import com.github.obsessive.library.eventbus.EventCenter;
 import com.huxq17.swipecardsview.SwipeCardsView;
@@ -74,6 +73,7 @@ public class LikeFragment extends BaseFragment {
             }
         });
 
+
         show();
     }
 
@@ -85,7 +85,7 @@ public class LikeFragment extends BaseFragment {
         if (adapter == null) {
 
             ContentBean contentBean=new ContentBean();
-            contentBean.setUrl("http://img.mmjpg.com/small/2016/694.jpg");
+            contentBean.setUrl("http://img4.imgtn.bdimg.com/it/u=2494485954,147865594&fm=11&gp=0.jpg");
 
             ContentBean contentBean2=new ContentBean();
             contentBean2.setUrl("http://img.mmjpg.com/small/2016/709.jpg");
