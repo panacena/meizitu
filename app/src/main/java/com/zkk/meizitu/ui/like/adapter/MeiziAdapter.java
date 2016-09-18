@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.huxq17.swipecardsview.BaseCardAdapter;
 import com.zkk.meizitu.R;
 import com.zkk.meizitu.bean.ContentBean;
+import com.zkk.meizitu.bean.ImageBean;
 
 import java.util.List;
 
@@ -16,15 +17,15 @@ import java.util.List;
  * Created by huxq17 on 2016/4/12.
  */
 public class MeiziAdapter extends BaseCardAdapter {
-    private List<ContentBean> datas;
+    private List<ImageBean.ListsBean> datas;
     private Context context;
 
-    public MeiziAdapter(List<ContentBean> datas, Context context) {
+    public MeiziAdapter(List<ImageBean.ListsBean> datas, Context context) {
         this.datas = datas;
         this.context = context;
     }
 
-    public void setData(List<ContentBean> datas){
+    public void setData(List<ImageBean.ListsBean> datas){
         this.datas = datas;
     }
     @Override
@@ -43,8 +44,8 @@ public class MeiziAdapter extends BaseCardAdapter {
             return;
         }
         ImageView imageView = (ImageView) cardview.findViewById(R.id.iv_meizi);
-        ContentBean meizi = datas.get(position);
-        String url = meizi.getUrl();
+        ImageBean.ListsBean meizi = datas.get(position);
+        String url = meizi.getLink();
         Glide.with(context).load(url).into(imageView);
     }
 

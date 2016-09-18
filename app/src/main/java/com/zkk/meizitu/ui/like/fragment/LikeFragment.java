@@ -1,13 +1,21 @@
 package com.zkk.meizitu.ui.like.fragment;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import com.github.obsessive.library.eventbus.EventCenter;
+import com.huxq17.swipecardsview.LogUtil;
 import com.huxq17.swipecardsview.SwipeCardsView;
 import com.zkk.meizitu.R;
 import com.zkk.meizitu.bean.ContentBean;
+import com.zkk.meizitu.bean.ImageBean;
+import com.zkk.meizitu.http.api.Constants;
+import com.zkk.meizitu.presenter.like.LikePresenter;
+import com.zkk.meizitu.presenter.like.impl.LikePresenterImpl;
 import com.zkk.meizitu.ui.base.BaseFragment;
 import com.zkk.meizitu.ui.like.adapter.MeiziAdapter;
+import com.zkk.meizitu.view.like.Likeview;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +25,16 @@ import butterknife.InjectView;
 /**
  * Created by Administrator on 2016/9/13 0013.
  */
-public class LikeFragment extends BaseFragment {
+public class LikeFragment extends BaseFragment implements Likeview{
 
     @InjectView(R.id.swipCardsView)
     SwipeCardsView swipeCardsView;
-    private List<ContentBean> mList = new ArrayList<>();
     private MeiziAdapter adapter;
+    private List<ImageBean.ListsBean> mLists = new ArrayList<ImageBean.ListsBean>();
+    private LikePresenter mLikePresenter;
+    private Context mContext;
 
+    private int curIndex;
     @Override
     protected void onFirstUserVisible() {
 
@@ -41,16 +52,17 @@ public class LikeFragment extends BaseFragment {
 
     @Override
     protected View getLoadingTargetView() {
-        return null;
+        return swipeCardsView;
     }
 
     @Override
     protected void initViewsAndEvents() {
-
+       // show();
         swipeCardsView.retainLastCard(true);
         swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
             @Override
             public void onShow(int index) {
+                curIndex = index;
             }
 
             @Override
@@ -72,9 +84,10 @@ public class LikeFragment extends BaseFragment {
                 showToast("点击了 position=" + index);
             }
         });
+        mContext=getActivity();
+        mLikePresenter=new LikePresenterImpl(mContext,this);
+        mLikePresenter.loadListData(null, Constants.EVENT_LIKE_DATA);
 
-
-        show();
     }
 
 
@@ -83,57 +96,14 @@ public class LikeFragment extends BaseFragment {
      */
     private void show() {
         if (adapter == null) {
-
-            ContentBean contentBean=new ContentBean();
-            contentBean.setUrl("http://img4.imgtn.bdimg.com/it/u=2494485954,147865594&fm=11&gp=0.jpg");
-
-            ContentBean contentBean2=new ContentBean();
-            contentBean2.setUrl("http://img.mmjpg.com/small/2016/709.jpg");
-
-            ContentBean contentBean3=new ContentBean();
-            contentBean3.setUrl("http://img.mmjpg.com/small/2016/724.jpg");
-
-            ContentBean contentBean4=new ContentBean();
-            contentBean4.setUrl("http://img.mmjpg.com/small/2016/679.jpg");
-
-            ContentBean contentBean5=new ContentBean();
-            contentBean5.setUrl("http://img.mmjpg.com/small/2016/693.jpg");
-
-            ContentBean contentBean6=new ContentBean();
-            contentBean6.setUrl("http://img.mmjpg.com/small/2016/708.jpg");
-
-            ContentBean contentBean7=new ContentBean();
-            contentBean7.setUrl("http://img.mmjpg.com/small/2016/649.jpg");
-
-            ContentBean contentBean8=new ContentBean();
-            contentBean8.setUrl("http://img.mmjpg.com/small/2016/664.jpg");
-
-            mList.add(contentBean);
-            mList.add(contentBean2);
-            mList.add(contentBean3);
-            mList.add(contentBean4);
-            mList.add(contentBean5);
-            mList.add(contentBean6);
-            mList.add(contentBean7);
-            mList.add(contentBean8);
-
-
-            mList.add(contentBean);
-            mList.add(contentBean2);
-            mList.add(contentBean3);
-            mList.add(contentBean4);
-            mList.add(contentBean5);
-            mList.add(contentBean6);
-            mList.add(contentBean7);
-            mList.add(contentBean8);
-            adapter = new MeiziAdapter(mList, getActivity());
+            adapter = new MeiziAdapter(mLists, mContext);
             swipeCardsView.setAdapter(adapter);
         } else {
             //if you want to change the UI of SwipeCardsView,you must modify the data first
-            adapter.setData(mList);
+            adapter.setData(mLists);
+            swipeCardsView.notifyDatasetChanged(curIndex);
         }
     }
-
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.fragment_like;
@@ -144,8 +114,18 @@ public class LikeFragment extends BaseFragment {
 
     }
 
+
     @Override
     protected boolean isBindEventBusHere() {
         return false;
     }
+
+    @Override
+    public void refreshListData(ImageBean imageBean) {
+       // mLists.clear();
+        mLists.addAll(imageBean.getLists());
+        Log.d("zkkk----",imageBean.getLists().size()+"----");
+        show();
+    }
+
 }

@@ -14,6 +14,7 @@ import com.github.obsessive.library.netstatus.NetUtils;
 import com.zkk.meizitu.R;
 import com.zkk.meizitu.ui.base.BaseActivity;
 import com.zkk.meizitu.ui.home.fragment.HomeFragment;
+import com.zkk.meizitu.ui.home.fragment.HomeNewFragment;
 import com.zkk.meizitu.ui.like.fragment.LikeFragment;
 import com.zkk.meizitu.ui.my.fragment.MyFragment;
 
@@ -38,7 +39,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     @InjectView(R.id.frame_container)
     FrameLayout frame_container;
 
-    HomeFragment mHomeFragment;
+    HomeNewFragment mHomeFragment;
     LikeFragment mLikeFragment;
     MyFragment  mMyFragment;
     private FragmentManager fm;
@@ -76,7 +77,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         navigation_bar_like.setOnClickListener(this);
         navigation_bar_my.setOnClickListener(this);
         fm=getSupportFragmentManager();
-        change_HomeFragment();
+        change_LikeFragment();
     }
 
 
@@ -84,7 +85,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         navigation_bar_home.setSelected(true);
         ft=fm.beginTransaction();
         if(mHomeFragment==null){
-            mHomeFragment=new HomeFragment();
+            mHomeFragment=new HomeNewFragment();
         }
         ft.replace(R.id.frame_container, mHomeFragment);
         ft.commit();

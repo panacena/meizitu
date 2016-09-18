@@ -35,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
 	   
 	    
 	    welcomeVideo=(VideoView)findViewById(R.id.welcomeVideo);
-	    Uri localUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.welcome);
+	    Uri localUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.meizi);
 	    welcomeVideo.setVideoURI(localUri);
 	    welcomeVideo.start();
 	    welcomeVideo.requestFocus();

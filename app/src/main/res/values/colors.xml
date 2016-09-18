@@ -7,4 +7,6 @@
 
 
     <color name="nav_divider">#ffd9d9d9</color>
+    <color name="container_background">#EBEBEB</color>
+    <color name="primary_text">#de000000</color>
 </resources>

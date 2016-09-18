@@ -1,6 +1,9 @@
 package com.zkk.meizitu.ui.home.fragment;
 
 import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +16,13 @@ import com.github.obsessive.library.eventbus.EventCenter;
 import com.github.obsessive.library.pla.PLAImageView;
 import com.github.obsessive.library.utils.CommonUtils;
 import com.github.obsessive.library.widgets.XSwipeRefreshLayout;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
 import com.zkk.meizitu.R;
 import com.zkk.meizitu.bean.ImageBean;
 import com.zkk.meizitu.http.api.Constants;
 import com.zkk.meizitu.presenter.home.HomePresenter;
 import com.zkk.meizitu.presenter.home.impl.HomePresenterImpl;
 import com.zkk.meizitu.ui.base.BaseFragment;
+import com.zkk.meizitu.ui.home.adapter.PhotoListAdapter;
 import com.zkk.meizitu.view.home.HomeView;
 import com.zkk.meizitu.views.PLALoadMoreListView;
 
@@ -31,7 +32,7 @@ import butterknife.InjectView;
 /**
  * Created by Administrator on 2016/9/13 0013.
  */
-public class HomeFragment extends BaseFragment implements HomeView{
+public class HomeNewFragment extends BaseFragment implements HomeView{
 
 
    /* @InjectView(R.id.banner)
@@ -39,17 +40,15 @@ public class HomeFragment extends BaseFragment implements HomeView{
     HomePresenter mHomePresenter;
     private Context mContext;
 
-    @InjectView(R.id.fragment_images_list_swipe_layout)
-    XSwipeRefreshLayout mSwipeRefreshLayout;
 
-    @InjectView(R.id.fragment_images_list_list_view)
-    PLALoadMoreListView mListView;
+    @InjectView(R.id.photo_rv)
+    RecyclerView mPhotoRv;
 
-    private ListViewDataAdapter<ImageBean.ListsBean> mListViewAdapter = null;
-
+    PhotoListAdapter mPhotoListAdapter;
 
     @Override
     protected void onFirstUserVisible() {
+
 
     }
 
@@ -65,59 +64,28 @@ public class HomeFragment extends BaseFragment implements HomeView{
 
     @Override
     protected View getLoadingTargetView() {
-        return mListView;
+        return mPhotoRv;
     }
 
     @Override
     protected void initViewsAndEvents() {
+     mContext=getActivity();
+     mPhotoListAdapter=new PhotoListAdapter(mContext);
+     mPhotoRv.setHasFixedSize(true);
+     mPhotoRv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+     mPhotoRv.setItemAnimator(new DefaultItemAnimator());
+     mPhotoRv.setAdapter(mPhotoListAdapter);
 
-        mContext=getActivity();
         mHomePresenter=new HomePresenterImpl(mContext,this);
         //   mHomePresenter.loadListData(null, Constants.EVENT_HOME_BANNER_DATA);
-
         Log.d("zkk---","onFirstUserVisible");
         mHomePresenter.refreshImagesListData(null, Constants.EVENT_HMOE_IMAGES_DATA);
-        Log.d("zkk---","initViewsAndEvents");
-        mListViewAdapter = new ListViewDataAdapter<ImageBean.ListsBean>(new ViewHolderCreator<ImageBean.ListsBean>() {
-            @Override
-            public ViewHolderBase<ImageBean.ListsBean> createViewHolder(int position) {
-                return new ViewHolderBase<ImageBean.ListsBean>() {
-
-                    PLAImageView mItemImage;
-
-                    @Override
-                    public View createView(LayoutInflater layoutInflater) {
-                        View convertView = layoutInflater.inflate(R.layout.list_item_images_list, null);
-                        mItemImage = ButterKnife.findById(convertView, R.id.list_item_images_list_image);
-
-                        return convertView;
-                    }
-
-                    @Override
-                    public void showData(int position, ImageBean.ListsBean itemData) {
-                        int width = Integer.parseInt(itemData.getWeight());
-                        int height = Integer.parseInt(itemData.getHeight());
-
-                        String imageUrl = itemData.getLink();
-
-                        if (!CommonUtils.isEmpty(imageUrl)) {
-                            Glide.with(mContext).load(imageUrl).into(mItemImage);
-                          //  ImageLoader.getInstance().displayImage(imageUrl, mItemImage);
-                        }
-
-                        mItemImage.setImageWidth(width);
-                        mItemImage.setImageHeight(height);
-                    }
-                };
-            }
-        });
-        mListView.setAdapter(mListViewAdapter);
 
     }
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.fragment_home_images_list;
+        return R.layout.fragment_content_photo;
     }
 
     @Override
@@ -147,12 +115,9 @@ public class HomeFragment extends BaseFragment implements HomeView{
 
     @Override
     public void refreshImagesListData(ImageBean imageBean) {
-        Log.d("zkk---","refreshImagesListData");
-        if (null != mListViewAdapter) {
-            mListViewAdapter.getDataList().clear();
-            mListViewAdapter.getDataList().addAll(imageBean.getLists());
-            mListViewAdapter.notifyDataSetChanged();
-        }
+
+      mPhotoListAdapter.setList(imageBean.getLists());
+      mPhotoListAdapter.notifyDataSetChanged();
     }
 
     @Override
